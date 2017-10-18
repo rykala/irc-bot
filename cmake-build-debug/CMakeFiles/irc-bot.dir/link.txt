@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/irc-bot.dir/main.cpp.o  -o irc-bot 

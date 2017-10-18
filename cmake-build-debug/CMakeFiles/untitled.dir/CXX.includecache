@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/chris/Desktop/FIT/PROJECTS/5/ISA/irc-bot/main.cpp
+iostream
+-
+main.h
+/home/chris/Desktop/FIT/PROJECTS/5/ISA/irc-bot/main.h
+
+/home/chris/Desktop/FIT/PROJECTS/5/ISA/irc-bot/main.h
+
