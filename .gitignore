@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Directories
+src/
+cmake-build-debug/
+
+# Custom
+isabot
+**/.idea/workspace.xml
+**/.idea/tasks.xml

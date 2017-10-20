@@ -1,11 +1,19 @@
-//
-// Created by chris on 10/18/17.
-//
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 
-#include "main.h"
+#include "Arguments.h"
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+int main(int argc, char *argv[]) {
+    Arguments arguments;
+
+    try {
+        arguments.parseArguments(argc, argv);
+    }
+    catch (const std::exception &exception) {
+        std::cerr << exception.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
 }
