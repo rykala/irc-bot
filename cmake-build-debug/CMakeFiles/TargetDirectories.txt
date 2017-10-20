@@ -1,3 +1,0 @@
-/home/chris/Desktop/FIT/PROJECTS/5/ISA/irc-bot/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/chris/Desktop/FIT/PROJECTS/5/ISA/irc-bot/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/chris/Desktop/FIT/PROJECTS/5/ISA/irc-bot/cmake-build-debug/CMakeFiles/irc-bot.dir

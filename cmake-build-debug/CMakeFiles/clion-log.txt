@@ -1,4 +1,0 @@
-/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/172.4343.16/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/chris/Desktop/FIT/PROJECTS/5/ISA/irc-bot
--- Configuring done
--- Generating done
--- Build files have been written to: /home/chris/Desktop/FIT/PROJECTS/5/ISA/irc-bot/cmake-build-debug
