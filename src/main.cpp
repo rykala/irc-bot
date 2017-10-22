@@ -3,15 +3,21 @@
 #include <iostream>
 
 #include "Arguments.h"
+#include "IrcBot.h"
+
+using namespace std;
 
 int main(int argc, char *argv[]) {
-    Arguments arguments;
 
     try {
+        Arguments arguments;
         arguments.parseArguments(argc, argv);
+
+        IrcBot ircBot(&arguments);
+        ircBot.start();
     }
-    catch (const std::exception &exception) {
-        std::cerr << exception.what() << std::endl;
+    catch (const exception &exception) {
+        cerr << exception.what() << endl;
         return EXIT_FAILURE;
     }
 
