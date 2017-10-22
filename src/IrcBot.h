@@ -14,9 +14,19 @@ private:
     TCPClient *client;
     Arguments *arguments;
 
+    void setUser(string name);
+    void joinChannels(string channels);
+    void filterMessages(const char *message);
+
+
 public:
     explicit IrcBot(Arguments *arguments);
+    ~IrcBot();
     void start();
+
+    string getDateToday();
+
+    const char * makeMessage(string text);
 };
 
 

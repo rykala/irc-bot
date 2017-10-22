@@ -4,6 +4,8 @@
 
 #include "Arguments.h"
 
+using namespace std;
+
 static const char *optString = "s:l:h?";
 
 static const struct option longOpts[] = {
@@ -46,7 +48,7 @@ int Arguments::parseArguments(int argc, char *argv[]) {
         if (this->host.empty()) {
             this->setHost(argv[i]);
         } else if (this->channels.empty()) {
-            this->setChannels(splitString(argv[i], ','));
+            this->channels = argv[i];
         } else {
             throw std::runtime_error("Error: Invalid parameters");
         }

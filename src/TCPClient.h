@@ -10,6 +10,7 @@
 using namespace std;
 
 class TCPClient {
+private:
     int socket;
 
 public:
@@ -17,7 +18,7 @@ public:
     ~TCPClient();
 
     ssize_t send(const char *buffer);
-    ssize_t receive(char *buffer, size_t len);
+    void receive(char *buffer, size_t size);
     void connect(const char *server, int port);
 };
 

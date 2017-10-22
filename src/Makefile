@@ -11,7 +11,7 @@ OBJ_FILES=$(patsubst %.cpp, %.o, $(SRC_FILES))
 all: isabot
 
 isabot: $(OBJ_FILES)
-		$(CPP) $(CPPFLAGS) $^ -o $(PROJ) -lcrypto
+		$(CPP) $(CPPFLAGS) $^ -o $(PROJ)
 		rm *.o
 
 pack: clean
