@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "Arguments.h"
 #include "IrcBot.h"
 
 using namespace std;
@@ -10,10 +9,7 @@ using namespace std;
 int main(int argc, char *argv[]) {
 
     try {
-        Arguments arguments;
-        arguments.parseArguments(argc, argv);
-
-        IrcBot ircBot(&arguments);
+        IrcBot ircBot(argc, argv);
         ircBot.start();
     }
     catch (const exception &exception) {

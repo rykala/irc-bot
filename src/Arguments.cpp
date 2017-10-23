@@ -31,11 +31,11 @@ int Arguments::parseArguments(int argc, char *argv[]) {
                 break;
 
             case 'h':
-                std::cout << "HELP" << std::endl;
+                cout << "HELP" << endl;
                 exit(1);
 
             case '?':
-                throw std::runtime_error("Error: Invalid parameter");
+                throw runtime_error("Error: Invalid parameter");
 
             default:
                 break;
@@ -50,36 +50,36 @@ int Arguments::parseArguments(int argc, char *argv[]) {
         } else if (this->channels.empty()) {
             this->channels = argv[i];
         } else {
-            throw std::runtime_error("Error: Invalid parameters");
+            throw runtime_error("Error: Invalid parameters");
         }
     }
 
     if (this->host.empty() || this->channels.empty()) {
-        throw std::runtime_error("Error: Missing parameters");
+        throw runtime_error("Error: Missing parameters");
     }
 
     return 0;
 }
 
-void Arguments::setHost(const std::string &host) {
-    std::string tmpHost = host;
-    std::size_t sz;
+void Arguments::setHost(const string &host) {
+    string tmpHost = host;
+    size_t sz;
 
-    std::size_t position = host.find(':');
+    size_t position = host.find(':');
 
-    if (position != std::string::npos) {
+    if (position != string::npos) {
         if (position + 1 == host.length()) {
-            throw std::runtime_error("Error: Invalid port");
+            throw runtime_error("Error: Invalid port");
         }
 
         tmpHost = host.substr(0, position);
 
-        std::string portString = host.substr(position + 1, host.length());
+        string portString = host.substr(position + 1, host.length());
 
-        int port = std::stoi(portString, &sz);
+        int port = stoi(portString, &sz);
 
         if (sz != portString.length() || port < 0) {
-            throw std::runtime_error("Error: Invalid port");
+            throw runtime_error("Error: Invalid port");
         }
 
         this->port = port;
@@ -88,13 +88,13 @@ void Arguments::setHost(const std::string &host) {
     this->host = tmpHost;
 }
 
-std::vector<std::string> Arguments::splitString(const std::string &string, char delimiter) {
-    std::istringstream ss(string);
+vector<string> Arguments::splitString(const string &string, char delimiter) {
+    istringstream ss(string);
     std::string token;
 
-    std::vector<std::string> strings;
+    vector<std::string> strings;
 
-    while(std::getline(ss, token, delimiter)) {
+    while(getline(ss, token, delimiter)) {
         strings.push_back(token);
     }
 

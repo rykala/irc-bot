@@ -14,6 +14,7 @@ ssize_t TCPClient::send(const char *buffer) {
 
 void TCPClient::receive(char *buffer, size_t size) {
     ssize_t index;
+
     if (( index = recv(socket, buffer, size, 0)) < 1) {
         perror("Recv error");
         close(socket);
