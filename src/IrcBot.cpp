@@ -32,11 +32,11 @@ void IrcBot::start() {
 
     while (true) {
         client->receive(messageBuffer, sizeof(messageBuffer));
-        istringstream messageStream(messageBuffer);
+//        istringstream messageStream(messageBuffer);
 
-        while (getline(messageStream, message)) {
-            filterMessages(message);
-        }
+//        while (getline(messageStream, message)) {
+            filterMessages(messageBuffer);
+//        }
 
         memset(messageBuffer, 0, sizeof messageBuffer);
     }
