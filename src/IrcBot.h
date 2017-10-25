@@ -6,13 +6,17 @@
 #define ISABOT_IRCBOT_H
 
 
+#include <array>
 #include "TCPClient.h"
 #include "Arguments.h"
+
 
 class IrcBot {
 private:
     TCPClient *client;
     Arguments *arguments;
+    vector<array<string, 3>> messages; // [channelName, receiver, message]
+    int privateMessageCounter = 0;
 
     void setUser(string name);
     void joinChannels(string channels);
@@ -33,6 +37,10 @@ public:
     void start();
 
     string getPingChannels(string message);
+
+    string getReceiver(string basic_string);
+
+    string getMessageText(string message, string receiver);
 };
 
 

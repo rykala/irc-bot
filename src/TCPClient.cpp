@@ -20,12 +20,12 @@ void TCPClient::receive(char *buffer, size_t size) {
         close(socket);
         exit(1);
     }
-
-    // CLEARS rubbish from received message
-    buffer[index] = '\0';
-    if (buffer[index - 1] == '\n') {
-        buffer[index - 1] = '\0';
-    }
+//
+//    // CLEARS rubbish from received message
+//    buffer[index] = '\0';
+//    if (buffer[index - 1] == '\n') {
+//        buffer[index - 1] = '\0';
+//    }
 }
 
 void TCPClient::connect(const char *host, int port) {
