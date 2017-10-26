@@ -1,32 +1,29 @@
-//
-// Created by chris on 10/22/17.
-//
-
 #ifndef ISABOT_IRCBOT_H
 #define ISABOT_IRCBOT_H
 
-
-#include <array>
 #include "TCPClient.h"
 #include "Arguments.h"
+#include "IrcParser.h"
 
 
 class IrcBot {
 private:
     TCPClient *client;
     Arguments *arguments;
-    vector<array<string, 3>> messages; // [channelName, receiver, message]
-    int privateMessageCounter = 0;
+    IrcParser *parser;
+
+    vector<vector<string>> privateMessages; // [channelName, receiver, message]
+    int privateMessagesCounter = 0;
 
     void setUser(string name);
+
     void joinChannels(string channels);
+
     void filterMessages(string message);
+
     string getDateToday();
-    const char * makeMessage(string text);
-    bool isCommand(string command, string message);
-    string getChannels(string message);
-    string getCommand(string message);
-    string slicePrefix(string message);
+
+    void sendMessage(string message);
 
 
 public:
@@ -36,11 +33,11 @@ public:
 
     void start();
 
-    string getPingChannels(string message);
+    void savePrivateMessage(string message, string channel);
 
-    string getReceiver(string basic_string);
+    void sendPrivateMessagesToJoinedUser(string message);
 
-    string getMessageText(string message, string receiver);
+    void sendMessageToOnlineUser(string message);
 };
 
 

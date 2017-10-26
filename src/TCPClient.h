@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <string>
+#include <cstring>
 #include "Arguments.h"
 
 using namespace std;

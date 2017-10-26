@@ -1,8 +1,5 @@
 #include <iostream>
-#include <ctime>
-#include <stdexcept>
 #include <sstream>
-#include <cstring>
 
 #include "IrcBot.h"
 
@@ -11,6 +8,7 @@ using namespace std;
 IrcBot::IrcBot(int argc, char *argv[]) {
     client = new TCPClient();
     arguments = new Arguments();
+    parser = new IrcParser();
 
     arguments->parseArguments(argc, argv);
 }
@@ -18,12 +16,12 @@ IrcBot::IrcBot(int argc, char *argv[]) {
 IrcBot::~IrcBot() {
     delete client;
     delete arguments;
+    delete parser;
 }
 
 void IrcBot::start() {
     char messageBuffer[512];
     string message;
-    string tmpMessage;
 
     client->connect(arguments->getHost().c_str(), arguments->getPort());
 
@@ -32,144 +30,48 @@ void IrcBot::start() {
 
     while (true) {
         client->receive(messageBuffer, sizeof(messageBuffer));
-//        istringstream messageStream(messageBuffer);
 
-//        while (getline(messageStream, message)) {
-            filterMessages(messageBuffer);
-//        }
+        filterMessages(messageBuffer);
 
         memset(messageBuffer, 0, sizeof messageBuffer);
     }
 }
 
 void IrcBot::filterMessages(string message) {
-    string command;
-    string channels;
-
     message.pop_back(); // Get rid of \r\n
-    cout << message << endl;
 
-    if (getCommand(message) == "PING") {
-        channels = getPingChannels(message);
-        client->send(makeMessage("PONG " + channels));
-        return;
-    }
+    if (parser->isCommand("PRIVMSG", message)) {
+        string channel = parser->getChannel(message);
 
-    message = slicePrefix(message);
-    command = getCommand(message);
-
-    if (command == "PRIVMSG") {
-        channels = getChannels(message);
-
-        if (isCommand("today", message)) {
-            client->send(makeMessage("PRIVMSG " + channels + " :" + getDateToday()));
-        } else if (isCommand("msg", message)) {
-            channels = getChannels(message);
-            string receiver = getReceiver(message);
-            string messageText = getMessageText(message, receiver);
-
-            array<string, 3> privateMessage = {channels, receiver, messageText};
-            messages.push_back(privateMessage);
-            privateMessageCounter++;
-
-            client->send(makeMessage("NAMES " + channels));
+        if (parser->isChatCommand("today", message)) {
+            sendMessage("PRIVMSG " + channel + " :" + getDateToday());
+        } else if (parser->isChatCommand("msg", message)) {
+            savePrivateMessage(message, channel);
+            sendMessage("NAMES " + channel);
         }
-    } else if (command == "JOIN" && !messages.empty()) {
-        channels = getChannels(message);
-//        string receiver = getUser(message);
-
-        //todo check if joined user has any messages pending
-        // cycle throught messages and send
-    } else if (command == "353" && privateMessageCounter) {
-        cout << message << endl;
-    } else if (command == "366" && privateMessageCounter) {
-        privateMessageCounter--;
+    } else if (parser->isCommand("JOIN", message) && !privateMessages.empty()) {
+        sendPrivateMessagesToJoinedUser(message);
+    } else if (parser->isCommand("353", message) && privateMessagesCounter) {
+        sendMessageToOnlineUser(message);
+    } else if (parser->isCommand("366", message) && privateMessagesCounter) {
+        privateMessagesCounter--;
+    } else if (parser->isCommand("PING", message)) {
+        sendMessage("PONG " + parser->getPingChannels(message));
     }
 }
 
 void IrcBot::setUser(string name) {
-    client->send(makeMessage("NICK " + name));
-    client->send(makeMessage("USER " + name + " " + name + " " + name + " :" + name));
+    sendMessage("NICK " + name);
+    sendMessage("USER " + name + " " + name + " " + name + " :" + name);
 }
 
 void IrcBot::joinChannels(string channels) {
-    client->send(makeMessage("JOIN " + channels));
+    sendMessage("JOIN " + channels);
 }
 
-string IrcBot::getCommand(string message) {
-    string command;
-    size_t commandLength;
-    string nullString;
-
-    commandLength = message.find(' ');
-    if (commandLength == string::npos) {
-        return nullString;
-    }
-
-    command = message.substr(0, commandLength);
-
-    return command;
-}
-
-string IrcBot::slicePrefix(string message) {
-    size_t prefixEnd;
-    string nullString;
-
-    prefixEnd = message.find(' ');
-    if (prefixEnd == string::npos) {
-        return nullString;
-    }
-
-    message = message.substr(prefixEnd + 1, message.length());
-
-    return message;
-}
-
-bool IrcBot::isCommand(string command, string message) {
-    size_t todayCommandStart;
-    string todayCommand;
-
-    command = "?" + command;
-
-    todayCommandStart = message.find(" :");
-    if (todayCommandStart == string::npos) {
-        return false;
-    }
-
-    todayCommandStart += 2; // need to add the " :"
-    todayCommand = message.substr(todayCommandStart, (command + " ").length());
-
-    return (todayCommand == command || todayCommand == (command + " "));
-}
-
-string IrcBot::getChannels(string message) {
-    string nullString;
-    string channels;
-    size_t channelsStart;
-    size_t channelsEnd;
-
-    channelsStart = message.find(' ');
-    if (channelsStart == string::npos) {
-        return nullString;
-    }
-
-    channels = message.substr(channelsStart + 1, message.length());
-
-    channelsEnd = channels.find(' ');
-    if (channelsEnd == string::npos) {
-        return nullString;
-    }
-
-    channels = channels.substr(0, channelsEnd + 1);
-
-    return channels;
-}
-
-const char *IrcBot::makeMessage(string text) {
-    string message;
-    message = text + "\r\n";
-
-    return message.c_str();
+void IrcBot::sendMessage(string message) {
+    message += "\r\n";
+    client->send(message.c_str());
 }
 
 string IrcBot::getDateToday() {
@@ -185,52 +87,53 @@ string IrcBot::getDateToday() {
     return string(buffer);
 }
 
-string IrcBot::getPingChannels(string message) {
-    string channels = message.substr(message.find(' ') + 1, message.length());
-
-    return channels;
-}
-
-string IrcBot::getReceiver(string message) {
-    string receiver;
-    string nullString;
-    size_t receiverStart;
-    size_t receiverEnd;
-    string command = ":?msg ";
-
-    receiverStart = message.find(":?msg ");
-    if (receiverStart == string::npos) {
-        return nullString;
+void IrcBot::savePrivateMessage(string message, string channel) {
+    string receiver = parser->getPrivateMessageReceiver(message);
+    if (receiver.empty()) {
+        return;
     }
 
-    receiver = message.substr(receiverStart + command.length(), message.length());
-
-    receiverEnd = receiver.find(':');
-    if (receiverEnd == string::npos) {
-        return nullString;
+    string messageText = parser->getPrivateMessageText(message, receiver);
+    if (messageText.empty()) {
+        return;
     }
 
-    receiver = receiver.substr(0, receiverEnd);
-
-    return receiver;
+    vector<string> privateMessage = {channel, receiver, messageText};
+    privateMessages.push_back(privateMessage);
+    privateMessagesCounter++;
 }
 
-string IrcBot::getMessageText(string message, string receiver) {
-    string messageText;
-    size_t messageStart;
-    string nullString;
+void IrcBot::sendMessageToOnlineUser(string message) {
+    string user;
 
-    messageStart = message.find(receiver + ':');
-    if (messageStart == string::npos) {
-        return nullString;
+    string users = parser->getUsersFromNames(message);
+    stringstream usersStream(users);
+
+    vector<string> privateMessage = privateMessages.at(privateMessages.size() - privateMessagesCounter);
+
+    while (getline(usersStream, user, ' ')) {
+        cout << user << endl;
+        if (user == privateMessage[1]) {
+            sendMessage("PRIVMSG " + privateMessage[0] + " :" + privateMessage[1] + ':' + privateMessage[2]);
+            privateMessages.erase(privateMessages.end() - privateMessagesCounter);
+        }
     }
-
-    messageStart += (receiver.length() + 1);
-
-    messageText = message.substr(messageStart, message.length());
-
-    return messageText;
 }
 
-// TODO ?msg
-// TODO SYSLOG
+void IrcBot::sendPrivateMessagesToJoinedUser(string message) {
+    cout << message << endl;
+    string joinedChannel = parser->getChannelFromJoin(message);
+    string user = parser->getJoinedUserFromJoin(message);
+    //todo bad parsing
+
+    for (auto it = privateMessages.begin(); it != privateMessages.end();) {
+        vector<string> privateMessage = *it;
+
+        if (joinedChannel == privateMessage[0] && user == privateMessage[1]) {
+            sendMessage("PRIVMSG " + privateMessage[0] + " :" + privateMessage[1] + ':' + privateMessage[2]);
+            it = privateMessages.erase(it);
+        } else {
+            it++;
+        }
+    }
+}
