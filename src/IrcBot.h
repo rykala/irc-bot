@@ -1,14 +1,16 @@
 #ifndef ISABOT_IRCBOT_H
 #define ISABOT_IRCBOT_H
 
-#include "TCPClient.h"
+#include "TcpClient.h"
 #include "Arguments.h"
 #include "IrcParser.h"
+#include "UdpClient.h"
 
 
 class IrcBot {
 private:
-    TCPClient *client;
+    TcpClient *TCPClient;
+    UdpClient *UDPClient;
     Arguments *arguments;
     IrcParser *parser;
 
@@ -21,7 +23,7 @@ private:
 
     void filterMessages(string message);
 
-    string getDateToday();
+    string getDateToday(int type);
 
     void sendMessage(string message);
 
@@ -38,6 +40,12 @@ public:
     void sendPrivateMessagesToJoinedUser(string message);
 
     void sendMessageToOnlineUser(string message);
+
+    void logMessage(string message);
+
+    bool containsKeywords(string message) const;
+
+    bool shouldLogMessage(const string message) const;
 };
 
 

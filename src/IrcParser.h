@@ -27,7 +27,9 @@ public:
 
     string getChannelFromJoin(string message);
 
-    string getJoinedUserFromJoin(string message);
+    string getUsername(string message);
+
+    string getMessageText(string message);
 
 private:
     string slicePrefix(string message);

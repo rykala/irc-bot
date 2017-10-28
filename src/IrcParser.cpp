@@ -151,6 +151,15 @@ string IrcParser::getChannelFromJoin(string message) {
     return message.substr(message.find(join) + join.length(), message.length());
 }
 
-string IrcParser::getJoinedUserFromJoin(string message) {
+string IrcParser::getUsername(string message) {
     return message.substr(1, message.find('!') - 1);
+}
+
+string IrcParser::getMessageText(string message) {
+    string text;
+
+    text = message.substr(message.find(' '), message.length());
+    text = text.substr(text.find(" :") + 2, text.length());
+
+    return text;
 }

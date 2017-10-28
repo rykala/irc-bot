@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <sstream>
+#include <cstring>
 
 #include "Arguments.h"
 
@@ -95,7 +96,9 @@ vector<string> Arguments::splitString(const string &string, char delimiter) {
     vector<std::string> strings;
 
     while(getline(ss, token, delimiter)) {
-        strings.push_back(token);
+        if (token != "") {
+            strings.push_back(token);
+        }
     }
 
     return strings;

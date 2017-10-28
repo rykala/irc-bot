@@ -9,17 +9,21 @@
 
 using namespace std;
 
-class TCPClient {
+class TcpClient {
 private:
     int socket;
+    string IP;
+
+    string getIpFromSocket(int socket);
 
 public:
-    TCPClient() = default;
-    ~TCPClient();
+    TcpClient() = default;
+    ~TcpClient();
 
-    ssize_t send(const char *buffer);
+    void send(const char *buffer);
     void receive(char *buffer, size_t size);
     void connect(const char *server, int port);
+    string getIP();
 };
 
 
