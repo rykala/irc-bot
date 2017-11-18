@@ -45,7 +45,7 @@ void IrcBot::start() {
 
 void IrcBot::filterMessages(string message) {
     message.pop_back(); // Get rid of \r\n
-    cout << message << endl;
+
     if (parser->isCommand("PRIVMSG", message)) {
         string channel = parser->getChannel(message);
 
