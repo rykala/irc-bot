@@ -32,7 +32,12 @@ int Arguments::parseArguments(int argc, char *argv[]) {
                 break;
 
             case 'h':
-                cout << "HELP" << endl;
+                cout << "HELP:" << endl;
+                cout << "isabot HOST[:PORT] CHANNELS [-s SYSLOG_SERVER] [-l HIGHLIGHT] [-h|--help]" << endl;
+                cout << "Examples:" << endl;
+                cout << "isabot irc.freenode.net:6667 \"#ISAChannel,#IRC\" -s 192.168.0.1 -l \"ip,isa\"" << endl;
+                cout << "isabot irc.freenode.net \"#ISAChannel,#IRC\" -l \"ip,isa\" -s 127.0.0.1" << endl;
+                cout << "isabot irc.freenode.net #ISAChannel -l \"tcp,udp\"" << endl;
                 exit(1);
 
             case '?':

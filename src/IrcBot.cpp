@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 
 #include "IrcBot.h"
 
@@ -63,6 +64,8 @@ void IrcBot::filterMessages(string message) {
         privateMessagesCounter--;
     } else if (parser->isCommand("PING", message)) {
         sendMessage("PONG " + parser->getPingChannels(message));
+    } else if (isError(message)) {
+        throw runtime_error("Error: bot cannot run with full functionality.");
     }
 
     if (shouldLogMessage(message) && containsKeywords(message)) {
@@ -180,4 +183,19 @@ void IrcBot::logMessage(string message) {
                     + parser->getUsername(message) + ": " + parser->getMessageText(message);
 
     UDPClient->send(syslog.c_str());
+}
+
+bool IrcBot::isError(string message) {
+    string command;
+    int errorCode;
+
+    command = parser->getCommand(message);
+
+    if (!command.empty() && command.at(0) != '4' && command.at(0) != '5') {
+        return false;
+    }
+
+    errorCode = stoi(command);
+
+    return errorCode >= 400 && errorCode < 600;
 }

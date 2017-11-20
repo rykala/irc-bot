@@ -20,7 +20,14 @@ private:
 public:
     Arguments() = default;
 
+    /**
+     * Sets host and if host has also specified port, the port is extracted and is set to port attribute sets the port.
+     */
     void setHost(const string &host);
+
+    /**
+     * Parses arguments of a command line and loads them into class attributes.
+     */
     int parseArguments(int argc, char *argv[]);
 
     //Getters

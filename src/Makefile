@@ -12,13 +12,8 @@ all: isabot
 
 isabot: $(OBJ_FILES)
 		$(CPP) $(CPPFLAGS) $^ -o $(PROJ)
-		rm *.o
-
-pack: clean
-	    tar cvzf xrykal00.tgz main.cpp main.h Makefile
+		rm -f *.o
 
 clean:
-		rm *.o
-
-clear:
-		clean
+		rm -f *.o
+		rm -f isabot

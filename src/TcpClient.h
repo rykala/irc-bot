@@ -20,9 +20,34 @@ public:
     TcpClient() = default;
     ~TcpClient();
 
+    /**
+     * Sends data from buffer.
+     *
+     * @param buffer data to be send.
+     */
     void send(const char *buffer);
+
+    /**
+     * Reads data into buffer.
+     *
+     * @param buffer reads data into this buffer
+     * @param size size of the buffer
+     */
     void receive(char *buffer, size_t size);
+
+    /**
+     * Connect to a given address.
+     *
+     * @param server server name, or its IPv4 IPv6 address
+     * @param port
+     */
     void connect(const char *server, int port);
+
+    /**
+     * Gets a client IPv4 address from a current connection.
+     *
+     * @return returns IPv4 address as a string.
+     */
     string getIP();
 };
 

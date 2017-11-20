@@ -7,7 +7,6 @@ using namespace std;
 bool IrcParser::isCommand(string commandName, string message) {
     string command;
     size_t commandLength;
-    string nullString;
 
     if (commandName != "PING") {
         message = slicePrefix(message);
@@ -21,6 +20,24 @@ bool IrcParser::isCommand(string commandName, string message) {
     command = message.substr(0, commandLength);
 
     return (command == commandName);
+}
+
+string IrcParser::getCommand(string message) {
+    string nullString;
+    string command;
+    size_t commandLength;
+
+    message = slicePrefix(message);
+
+    commandLength = message.find(' ');
+    if (commandLength == string::npos) {
+        return nullString;
+    }
+
+    command = message.substr(0, commandLength);
+
+    return command;
+
 }
 
 string IrcParser::slicePrefix(string message) {

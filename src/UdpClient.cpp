@@ -11,7 +11,7 @@ UdpClient::~UdpClient() {
 }
 
 void UdpClient::connect(const char *server, int port) {
-    struct addrinfo address; // NOLINT
+    struct addrinfo address;
 
     const char *portString = to_string(port).c_str();
 
