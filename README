@@ -1,8 +1,7 @@
-# isabot
+# ISABOT
 Autor: Kryštof Rykala
 Login: xrykal00
-
-IRC bot do předmětu ISA.
+Popis: IRC bot do předmětu ISA.
 
 # Spuštění
 isabot HOST[:PORT] CHANNELS [-s SYSLOG_SERVER] [-l HIGHLIGHT] [-h|--help]
@@ -16,6 +15,7 @@ isabot irc.freenode.net #ISAChannel -l "tcp,udp"
 Makefile
 README
 manual.pdf
+src/
 src/Makefile
 src/main.cpp
 src/Arguments.cpp

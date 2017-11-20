@@ -191,7 +191,7 @@ bool IrcBot::isError(string message) {
 
     command = parser->getCommand(message);
 
-    if (!command.empty() && command.at(0) != '4' && command.at(0) != '5') {
+    if (command.empty() || (!command.empty() && command.at(0) != '4' && command.at(0) != '5')) {
         return false;
     }
 
