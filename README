@@ -1,0 +1,31 @@
+# isabot
+Autor: Kryštof Rykala
+Login: xrykal00
+
+IRC bot do předmětu ISA.
+
+# Spuštění
+isabot HOST[:PORT] CHANNELS [-s SYSLOG_SERVER] [-l HIGHLIGHT] [-h|--help]
+
+## Příklad:
+isabot irc.freenode.net:6667 "#ISAChannel,#IRC" -s 192.168.0.1 -l "ip,isa"
+isabot irc.freenode.net "#ISAChannel,#IRC" -l "ip,isa" -s 127.0.0.1
+isabot irc.freenode.net #ISAChannel -l "tcp,udp"
+
+# Odevzdané soubory
+Makefile
+README
+manual.pdf
+src/Makefile
+src/main.cpp
+src/Arguments.cpp
+src/Arguments.h
+src/IrcBot.cpp
+src/IrcBot.h
+src/IrcParser.cpp
+src/IrcParser.h
+src/TcpClient.cpp
+src/TcpClient.h
+src/UdpClient.cpp
+src/UdpClient.h
+
