@@ -3,6 +3,13 @@ Autor: Kryštof Rykala
 Login: xrykal00
 Popis: IRC bot do předmětu ISA.
 
+# Popis
+Program isabot, je IRC bot s logováním syslog. Jedná se o klienta, který se připojí na zvolený
+server a jeho kanály, na kterých poté sleduje komunikaci a na základě zpráv výkonává svou
+funkčnost. Bot má dvě hlavní funkce a to výpis konkretního data a zaslání zprávy uživateli, na
+danném kanálu. Bot rovněž umožnujě logování zpráv pomocí protokolu syslog, zprávy jsou logovány
+na základě klíčových slov, uvedených při spuštění.
+
 # Spuštění
 isabot HOST[:PORT] CHANNELS [-s SYSLOG_SERVER] [-l HIGHLIGHT] [-h|--help]
 
